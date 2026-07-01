@@ -1,26 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Noto+Sans+KR:wght@100..900&family=Orbitron:wght@400..900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #020617;
+  --foreground: #f8fafc;
+  
+  --deep-space: #01040d;
+  --cyber-blue: #00f0ff;
+  --electric-teal: #0df2c9;
+  --vibrant-cyan: #06b6d4;
+  --neon-pulse: rgba(0, 240, 255, 0.4);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  
+  --color-cyber-blue: var(--cyber-blue);
+  --color-electric-teal: var(--electric-teal);
+  --color-vibrant-cyan: var(--vibrant-cyan);
+  
+  --font-sans: 'Noto Sans KR', var(--font-geist-sans), sans-serif;
+  --font-serif: 'Alegreya', serif;
+  --font-mono: 'Orbitron', var(--font-geist-mono), monospace;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15), transparent 70%),
+    linear-gradient(rgba(15, 23, 42, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.3) 1px, transparent 1px);
+  background-size: 100% 100%, 25px 25px, 25px 25px;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* Cybernetic HUD Panels */
+.cyber-panel {
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.03);
+  position: relative;
+}
+
+.cyber-panel-header {
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  background: rgba(6, 182, 212, 0.05);
+}
+
+/* Glow lines */
+.neon-glow-blue {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
+}
+
+.neon-glow-teal {
+  box-shadow: 0 0 15px rgba(13, 242, 201, 0.35);
+}
+
+/* Grid overlay background */
+.cyber-grid-overlay {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Scan line scan laser */
+@keyframes laser-scan-anim {
+  0% { top: 0%; opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { top: 100%; opacity: 0.8; }
+}
+
+.laser-scanner {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(180deg, rgba(0, 240, 255, 0) 0%, rgba(0, 240, 255, 1) 50%, rgba(0, 240, 255, 0) 100%);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
+  animation: laser-scan-anim 4s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Pulse keyframes */
+@keyframes hud-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.cyber-pulse {
+  animation: hud-pulse 2s infinite ease-in-out;
+}
+
+/* HUD corners */
+.hud-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.hud-tl {
+  top: -1px; left: -1px;
+  border-top: 2px solid var(--cyber-blue);
+  border-left: 2px solid var(--cyber-blue);
+}
+
+.hud-tr {
+  top: -1px; right: -1px;
+  border-top: 2px solid var(--cyber-blue);
+  border-right: 2px solid var(--cyber-blue);
+}
+
+.hud-bl {
+  bottom: -1px; left: -1px;
+  border-bottom: 2px solid var(--electric-teal);
+  border-left: 2px solid var(--electric-teal);
+}
+
+.hud-br {
+  bottom: -1px; right: -1px;
+  border-bottom: 2px solid var(--electric-teal);
+  border-right: 2px solid var(--electric-teal);
+}
+
+/* CRITICAL scanline static */
+.scanline-static::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 1;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+/* Glitch animation */
+@keyframes textGlitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch-text:hover {
+  animation: textGlitch 0.3s linear infinite;
+  color: var(--cyber-blue);
+  text-shadow: 1px 0 var(--electric-teal), -1px 0 var(--vibrant-cyan);
 }
