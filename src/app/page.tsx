@@ -37,7 +37,7 @@ export default function Home() {
   const [isPwaOpen, setIsPwaOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalContainerRef = useRef<HTMLDivElement>(null);
 
   // Time ticker
   useEffect(() => {
@@ -82,10 +82,10 @@ export default function Home() {
     return () => clearInterval(logTimer);
   }, []);
 
-  // Scroll terminal logs to bottom
+  // Scroll terminal logs to bottom without scrolling the window
   useEffect(() => {
-    if (terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (terminalContainerRef.current) {
+      terminalContainerRef.current.scrollTop = terminalContainerRef.current.scrollHeight;
     }
   }, [logs]);
 
@@ -268,13 +268,15 @@ export default function Home() {
             </div>
           }
         >
-          <div className="bg-black/90 p-4 rounded-[3px] border border-cyber-blue/10 h-72 lg:h-[350px] overflow-y-auto font-mono text-[10px] text-emerald-400 space-y-1.5 scanline-static scrollbar-thin scrollbar-thumb-emerald-800">
+          <div 
+            ref={terminalContainerRef}
+            className="bg-black/90 p-4 rounded-[3px] border border-cyber-blue/10 h-72 lg:h-[350px] overflow-y-auto font-mono text-[10px] text-emerald-400 space-y-1.5 scanline-static scrollbar-thin scrollbar-thumb-emerald-800"
+          >
             {logs.map((log, i) => (
               <div key={i} className="leading-relaxed whitespace-pre-wrap">
                 {log}
               </div>
             ))}
-            <div ref={terminalEndRef} />
           </div>
           <div className="mt-3 flex items-center gap-2 bg-slate-950 p-2.5 rounded-[3px] border border-cyan-500/10 select-none">
             <Info className="w-3.5 h-3.5 text-cyber-blue shrink-0" />
