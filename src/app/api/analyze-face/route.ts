@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.GEMINI_API_KEY || '';
+    const apiKey = (process.env.GEMINI_API_KEY || '').trim();
     if (!apiKey) {
       return NextResponse.json(
         { error: 'GEMINI_API_KEY가 서버 환경 변수에 설정되어 있지 않습니다.' },
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Direct HTTP POST to stable v1 Gemini API endpoint (bypassing SDK wrappers)
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     // Map base64 images into the exact inlineData format Gemini expect
     const imageParts = images.map(img => {
